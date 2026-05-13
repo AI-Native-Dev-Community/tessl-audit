@@ -1,0 +1,16 @@
+{
+  "name": "tessl-audit",
+  "version": "1.0.0",
+  "description": "Security posture and quality report for Tessl plugins installed in your project",
+  "author": "Simon Maple <simon@tessl.io>",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/simonmaple/tessl-audit.git"
+  },
+  "keywords": ["tessl", "audit", "security", "plugins", "ai", "llm"],
+  "bin": { "tessl-audit": "./tessl-audit.js" },
+  "dependencies": { "tessl": ">=0.79.0" },
+  "files": ["tessl-audit.js", "README.md", "LICENSE"],
+  "engines": { "node": ">=18" }
+}
