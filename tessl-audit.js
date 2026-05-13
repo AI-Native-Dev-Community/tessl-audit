@@ -144,11 +144,11 @@ function parsePluginInfo(raw) {
     // intervening punctuation to normalise lines with variable whitespace/symbols.
     const stripped = line.replace(/[ --]/g, '').trim();
 
-    if (/^Verified\s/.test(stripped)) {
+    if (/^Verified/.test(stripped)) {
       result.verified = stripped.includes('✔');
       continue;
     }
-    if (/^PassedModeration\s/.test(stripped)) {
+    if (/^PassedModeration/.test(stripped)) {
       result.passedModeration = stripped.includes('✔');
       continue;
     }
@@ -397,8 +397,16 @@ function checkAuth(json) {
   return new Promise((resolve) => {
     execFile('tessl', ['whoami'], { timeout: 10_000 }, (err) => {
       if (err) {
+        const notFound = err.code === 'ENOENT';
         if (json) {
-          process.stderr.write(JSON.stringify({ error: 'not_authenticated', message: 'Run: tessl auth login', docs: 'https://docs.tessl.io/introduction-to-tessl/installation' }) + '\n');
+          const payload = notFound
+            ? { error: 'tessl_not_found', message: 'tessl CLI not found — install with: npm i -g tessl', docs: 'https://docs.tessl.io/introduction-to-tessl/installation' }
+            : { error: 'not_authenticated', message: 'Run: tessl auth login', docs: 'https://docs.tessl.io/introduction-to-tessl/installation' };
+          process.stderr.write(JSON.stringify(payload) + '\n');
+        } else if (notFound) {
+          console.error('Error: tessl CLI not found.');
+          console.error('Install: npm i -g tessl');
+          console.error('Docs: https://docs.tessl.io/introduction-to-tessl/installation');
         } else {
           console.error('Error: not authenticated with Tessl.');
           console.error('Run:  tessl auth login');
@@ -435,7 +443,7 @@ Options:
 Reads tessl.json and reports security, quality, and uplift data
 for every installed plugin from the Tessl registry.
 
-Docs: https://github.com/simonmaple/tessl-audit
+Docs: https://github.com/AI-Native-Dev-Community/tessl-audit
     `.trim());
     process.exit(0);
   }
@@ -532,7 +540,7 @@ Docs: https://github.com/simonmaple/tessl-audit
 
     return {
       plugin:       depName,
-      version:      depMeta?.version ?? '-',
+      version:      typeof depMeta === 'string' ? depMeta : (depMeta?.version ?? '-'),
       type:         localType,
       publisher,
       skillCount,

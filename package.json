@@ -6,7 +6,7 @@
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/simonmaple/tessl-audit.git"
+    "url": "https://github.com/AI-Native-Dev-Community/tessl-audit.git"
   },
   "keywords": ["tessl", "audit", "security", "plugins", "ai", "llm"],
   "bin": { "tessl-audit": "./tessl-audit.js" },

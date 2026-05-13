@@ -131,29 +131,6 @@ The JSON shape:
 
 ---
 
-## Use in CI
-
-Add a quality gate to your pipeline:
-
-```yaml
-# GitHub Actions example
-- name: Audit Tessl plugins
-  run: |
-    npx tessl-audit --json > audit.json
-    # Fail if any Critical plugins are installed
-    node -e "
-      const fs = require('fs');
-      const r = JSON.parse(fs.readFileSync('./audit.json', 'utf8'));
-      const critical = r.plugins.filter(t => t.security === 'Critical');
-      if (critical.length) {
-        console.error('Critical plugins found:', critical.map(t => t.plugin));
-        process.exit(1);
-      }
-    "
-```
-
----
-
 ## Further reading
 
 - [Evaluate skill quality using scenarios](https://docs.tessl.io/evaluate/evaluate-skill-quality-using-scenarios)
